@@ -1,0 +1,14 @@
+# 获取数量排名前20的弹幕
+def Top20(danmu_all):
+    # danmu_all是一个字典类型的数据，存放的内容格式为{('弹幕': '数量')}
+    # 依据danmu_all的values值进行降序排序
+    danmu_all = sorted(danmu_all.items(), key=lambda danmu_all: danmu_all[1], reverse=True)
+    # print(danmu_all)
+
+    # 输出数量排名前20个的弹幕，并保存
+    for i, cnt in zip(danmu_all, range(20)):
+        print(i[0])
+
+    # print(danmu_top20)
+    # 返回排完序后的弹幕内容
+    return danmu_all
