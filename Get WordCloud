@@ -1,0 +1,39 @@
+# 制作词云图
+def WorldCloud():
+    f = open('content.txt', encoding='utf-8')
+    txt = f.read()
+    # 使用jieba分词模块，提取出关键字
+    string = ' '.join(jieba.lcut(txt))
+    # 设置基本参数，导入模板图片
+    wc = wordcloud.WordCloud(
+        width=700,
+        height=700,
+        background_color='white',
+        scale=20,
+        font_path='msyh.ttc',
+        #mask='sea.png'
+    )
+    wc.generate(txt)
+    wc.to_file('content.png')
+
+
+# 导入需要的库stylecloud
+def StyleCloud():
+    with open('danmu.txt', 'r', encoding='utf-8') as fp:
+        text = fp.read()
+
+    a = ''.join(jieba.lcut(text))
+
+    stylecloud.gen_stylecloud(
+        #file_path='danmu.txt',
+        text = a,
+        icon_name='fas fa-fish',
+        palette='cmocean.diverging.Balance_20',
+        font_path="msyh.ttc",
+        background_color='white',
+        output_name='xjxcloud.jpg',
+        gradient='horizontal',
+        invert_mask=False,
+        size=2048,
+        max_words=300
+        )
