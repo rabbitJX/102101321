@@ -1,0 +1,41 @@
+# 将弹幕内容及其数量写入Excel表格中
+def Write_to_Excel(danmu_all):
+    # 建立一个新的Excel表格
+    book = xlwt.Workbook(encoding='utf-8', style_compression=0)
+    # 命名该表格
+    sheet = book.add_sheet('DanMu_Analyze', cell_overwrite_ok=True)
+    # 定义表格每列的标题
+    col = ('Content of Danmu', 'amount')
+    # 先将标题写入表格，格式为2*n的表格
+    for i in range(2):
+        sheet.write(0, i, col[i])
+    # 将数据依次写入表格中，本表格只设定填入数量排名前100的弹幕
+    for item, row in zip(danmu_all, range(1, 100)):
+        for column in range(2):
+            sheet.write(row, column, item[column])
+    #path = input("Please enter the path that you want:")
+    # 设定路径并保存表格
+    path = 'C:/Users/JiaXin/Desktop/exl.xls'
+    book.save(path)
+    Vision()
+
+
+# 生成直方图
+def Vision():
+    # 读取 Excel 文件
+    data = pd.read_excel('danmu.xlsx')
+    # 提取弹幕和数量列
+    danmu = data['Content of Danmu']
+    quantity = data['amount']
+    # 设置中文字体
+    plt.rcParams['font.family'] = ['SimHei']
+    # 绘制直方图
+    plt.bar(danmu, quantity)
+    # 设置图形标题和x/y轴标签
+    plt.title('弹幕数量分布')
+    plt.xlabel('Content of Danmu')
+    plt.ylabel('amount')
+    # 自动调整x轴标签的旋转角度，使其更易读
+    plt.xticks(rotation=90)
+    # 保存为图片
+    plt.savefig('Vision of Danmu.png')
