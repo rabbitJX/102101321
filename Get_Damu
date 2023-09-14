@@ -1,3 +1,25 @@
+# 获取身份信息，封装请求标头
+def GetHeaders():
+    # 进入b站，获取Cookie和User-Agent信息（为了防止网站反爬，通常需要进行伪装，一般利用这两个信息就能够爬取网站的基本信息），并封装在headers中
+    headers = {
+        'Cookie': "buvid3=F1DD24B5-C5E5-94DF-D41A-D3AAF84425CF31615infoc; b_nut=1693973031; i-wanna-go-back=-1; b_ut=7; _uuid=CEC9B861-E2BC-7BCC-A956-D2A8B382FDBC31893infoc; buvid4=35252A41-1298-7C0E-3449-93D27C95FCF432494-023090612-X83v1qigvaVZfatF2QXk2A%3D%3D; header_theme_version=CLOSE; CURRENT_FNVAL=4048; bp_video_offset_399417324=253625691508648509; rpdid=|(u)luk)))~~0J'uYmJm)lR)R; bp_video_offset_1110022060=839960934424248355; SESSDATA=76b8da2d%2C1710001324%2Cb1e5a%2A91CjARDZ0xIKhi1MCFUmBMKNyuP3hpQKguMCR7m9F_4Uc3hqKkWdIgNPvJUeMyYxwjpXsSVnBURjZHLURUcnA5ckZqa0xELUp2eGlDZTFyX1dqVVRTRGVhZEVuV3habFhzQzU5NVd2WWdXNHBhM3oyRUZzZ0xEYURyRFluUUpHT3F1TGRTU2dGT293IIEC; bili_jct=1cf74cb1bfee9edc7fdc44ae30c5c727; DedeUserID=1110022060; DedeUserID__ckMd5=f2a6d1506883cf9a; sid=7nhlmx8f; PVID=3; fingerprint=b8df6d1fb663e0146e6113bd51d7b3d8; buvid_fp_plain=undefined; buvid_fp=b8df6d1fb663e0146e6113bd51d7b3d8; b_lsid=4AD9FB92_18A91CBCB72; innersign=0; home_feed_column=4; browser_resolution=409-998",
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 Edg/116.0.1938.76',
+    }
+    # 返回headers
+    return headers
+
+
+# 访问并爬取视频页面信息接口
+def RequestUrl(page, title):
+    # 获得视频页面信息接口
+    # 由于300个视频一个页面装不下，需要多个页面，故设置page变量满足翻页需求，能够获取不同页面的所有视频信息
+    url = 'https://api.bilibili.com/x/web-interface/wbi/search/type?__refresh__=true&_extra=&context=&page=' + str(page) + '&page_size=42&from_source=&from_spmid=333.337&platform=pc&highlight=1&single_column=0&keyword=' + title + '&qv_id=fBoGUUYz7hKF97P6ugHWkzTz7QdmwgSg&ad_resource=5654&source_tag=3&gaia_vtoken=&category_id=&search_type=video'
+    # 请求并爬取
+    response = requests.get(url=url, headers=GetHeaders())
+    # 返回爬取内容
+    return response
+
+
 # 爬取bvid
 def GetBvid(response):
     # 利用正则表达式，获得视频bvid号，返回的是一个列表
