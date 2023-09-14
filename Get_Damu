@@ -1,0 +1,30 @@
+# 爬取bvid
+def GetBvid(response):
+    # 利用正则表达式，获得视频bvid号，返回的是一个列表
+    bvid = re.findall('"bvid":"(.*?)","title"', response.text)
+    return bvid
+
+
+# 获取cid
+def GetCid(bvid):
+    # cid获取接口
+    cid_url = "https://api.bilibili.com/x/player/pagelist?bvid=" + bvid + "&amp;jsonp=jsonp"
+    res = requests.get(url=cid_url, headers=GetHeaders())
+    res.encoding = 'utf-8'
+    # print(res.text)
+    # 利用正则表达式，获得cid号，并转换成字符串
+    cid = ''.join(re.findall('"cid":(.*?),"page"', res.text))
+    return cid
+
+
+#获取视频弹幕
+def GetDanmu(cid):
+    # 获取弹幕接口，一个cid对应一个视频弹幕
+    danmu_url = "https://api.bilibili.com/x/v1/dm/list.so?oid=" + str(cid)
+    # print(danmu_url)
+    content = requests.get(url=danmu_url, headers=GetHeaders())
+    content.encoding = 'utf-8'
+    # 利用正则表达式，清洗无关内容，获取弹幕内容
+    danmu = re.findall('<d p=".*?">(.*?)</d>', content.text)
+    # print(danmu)
+    return danmu
